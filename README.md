@@ -42,8 +42,9 @@ for t in range(1,len(observed_sequence)):
   for j in range(len(initial_probabilities)):
     alpha[t,j]=emisson_matrix[j,observed_sequence[t]]*np.sum(alpha[t-1,:]*transition_matrix[:,j])
 probability=np.sum(alpha[-1,:])
+print("NAME: DEEPIKA R")
+print("212223230038")
 print("The probability of the observed sequence is:",probability)
-
 most_likely_sequence=[]
 for t in range(len(observed_sequence)):
   if(alpha[t,0] > alpha[t,1]):
