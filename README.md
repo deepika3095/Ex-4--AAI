@@ -30,28 +30,52 @@ Construct a Python code to find the sequence of hidden states by the known seque
 ```python
 import numpy as np
 
-transition_matrix = np.array([[0.7,0.3],[0.4,0.6]])
-initial_probabilities = np.array([0.5,0.5])
-observed_sequence = np.array([1,1,1,0,0,1])
-emisson_matrix = np.array([[0.1,0.9],[0.8,0.2]])
+transition_matrix = np.array([
+    [0.7, 0.3],
+    [0.4, 0.6]
+])
 
-alpha=np.zeros((len(observed_sequence),len(initial_probabilities)))
-alpha[0,:]=initial_probabilities*emisson_matrix[:,observed_sequence[0]]
+initial_probabilities = np.array([0.5, 0.5])
 
-for t in range(1,len(observed_sequence)):
-  for j in range(len(initial_probabilities)):
-    alpha[t,j]=emisson_matrix[j,observed_sequence[t]]*np.sum(alpha[t-1,:]*transition_matrix[:,j])
-probability=np.sum(alpha[-1,:])
+observed_sequence = np.array([1, 1, 1, 0, 0, 1])
+
+emission_matrix = np.array([
+    [0.1, 0.9],
+    [0.8, 0.2]
+])
+
+alpha = np.zeros((len(observed_sequence), len(initial_probabilities)))
+
+alpha[0, :] = initial_probabilities * emission_matrix[:, observed_sequence[0]]
+
+for t in range(1, len(observed_sequence)):
+
+    for j in range(len(initial_probabilities)):
+
+        previous = alpha[t - 1, :]
+        transition = transition_matrix[:, j]
+        emission = emission_matrix[j, observed_sequence[t]]
+
+        alpha[t, j] = emission * np.sum(previous * transition)
+
+probability = np.sum(alpha[-1, :])
+
 print("NAME: DEEPIKA R")
 print("212223230038")
-print("The probability of the observed sequence is:",probability)
-most_likely_sequence=[]
+print("The probability of the observed sequence is:", probability)
+
+most_likely_sequence = []
+
 for t in range(len(observed_sequence)):
-  if(alpha[t,0] > alpha[t,1]):
-    most_likely_sequence.append("sunny")
-  else:
-    most_likely_sequence.append('rainy')
-print("The most likely sequence of weather states is:",most_likely_sequence)
+
+    if alpha[t, 0] > alpha[t, 1]:
+        most_likely_sequence.append("sunny")
+
+    else:
+        most_likely_sequence.append("rainy")
+
+print("The most likely sequence of weather states is:")
+print(most_likely_sequence)
 ```
 
 ## Output:
